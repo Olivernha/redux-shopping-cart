@@ -1,6 +1,6 @@
 [
   {
-     "id": "207",
+     "id": 207,
      "name":"Bananas",
      "price": 1.09,
      "description": "This cluster of delicious bananas will keep your hunger down while filling you with nutritious potassium. ",
@@ -9,7 +9,7 @@
      "imageCredit":"\"Bananas (edited)\" by 24oranges.nl is licensed under CC BY-SA 2.0"
   },
   {
-     "id": "208",
+     "id": 208,
      "name":"Chocolates",
      "price": 9.99,
      "description":"This 3-pack of fine Zotter chocolates comes all the way from Austria and will bring you the comfort and joy you need this very day.",
@@ -18,7 +18,7 @@
      "imageCredit":"Kari Ferguson, Oh Hello Again 2021"
   },
   {
-    "id": "209",
+    "id": 209,
      "name":"Ice cream",
      "price": 3.49,
      "description":"This is a delicious ice cream cone that will literally melt in your mouth. Enjoy on any warm summer day.",
@@ -27,7 +27,7 @@
      "imageCredit":"\"ice cream cone\" by sussexcareers is marked under CC0 1.0."
   },
   {
-     "id": "300",
+     "id": 300,
      "name":"Headphones",
      "price": 34.99,
      "description":"Look cool while blocking out the rest of the world",
@@ -36,7 +36,7 @@
      "imageCredit":"\"Headphones in Black and White\" by Image Catalog is marked under CC0 1.0."
   },
   {
-     "id": "302",
+     "id": 302,
      "name":"Candle",
      "price": 20.00,
      "description":"Do not leave this candle burning all night, but enjoy the smell and warm color it provides.",

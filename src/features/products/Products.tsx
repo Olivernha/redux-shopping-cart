@@ -19,10 +19,12 @@ export function Products() {
       dispatch(receivedProducts(products));
     });
   }, []);
+  console.log(products);
+
   return (
     <main className="page">
       <ul className={styles.products}>
-        {Object.values(products).map((product) => (
+        {products.map((product) => (
           <li key={product.id}>
             <article className={styles.product}>
               <figure>
@@ -35,7 +37,7 @@ export function Products() {
                 <h1>{product.name}</h1>
                 <p>{product.description}</p>
                 <p>${product.price}</p>
-                <button onClick={() => dispatch(addToCart(product.id))}>Add to Cart 🛒</button>
+                <button onClick={() => dispatch(addToCart(product))}>Add to Cart 🛒</button>
               </div>
             </article>
           </li>
