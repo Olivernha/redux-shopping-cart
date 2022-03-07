@@ -1,9 +1,9 @@
-import React from "react";
+
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { Cart } from "./features/cart/Cart";
 import { CartLink } from "./features/cart/CartLink";
 import { Products } from "./features/products/Products";
-import styles from "./App.module.css";
+import styles from './App.module.css'
 
 function App() {
   return (
