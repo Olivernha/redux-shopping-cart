@@ -45,3 +45,10 @@ export const getMemoizedNumItems = createSelector(
     return items.reduce((sum, item) => sum + item.quantity, 0);
   }
 );
+export const getTotalPrice = createSelector(
+    (state: RootState) => state.cart.items,
+    (items) => {
+      console.log("calledTotal");
+        return items.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2);
+    }
+)

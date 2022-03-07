@@ -1,12 +1,12 @@
 import React from "react";
 import { useAppSelector } from "../../app/hooks";
+import { getTotalPrice } from "./cartSlice";
 import styles from "./Cart.module.css";
 
 export function Cart() {
   const products = useAppSelector(state => state.products.products);
   const items = useAppSelector(state => state.cart.items)
-  console.log(products);
-  console.log(items);
+ const totalPrice = useAppSelector(getTotalPrice);
 
   return (
     <main className="page">
@@ -22,7 +22,7 @@ export function Cart() {
         </thead>
         <tbody>
           {items.map(item => (
-            <tr>
+            <tr key={item.id}>
               <td>{item.name}</td>
               <td>
                 <input type="text" className={styles.input} defaultValue={item.quantity} />
@@ -40,7 +40,7 @@ export function Cart() {
           <tr>
             <td>Total</td>
             <td></td>
-            <td className={styles.total}>${0.0}</td>
+            <td className={styles.total}>${totalPrice}</td>
             <td></td>
           </tr>
         </tfoot>

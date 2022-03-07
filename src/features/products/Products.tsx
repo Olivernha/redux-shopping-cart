@@ -19,12 +19,10 @@ export function Products() {
       dispatch(receivedProducts(products));
     });
   }, []);
-  console.log(products);
-
   return (
     <main className="page">
       <ul className={styles.products}>
-        {products.map((product) => (
+        {Object.values(products).map((product) => (
           <li key={product.id}>
             <article className={styles.product}>
               <figure>
