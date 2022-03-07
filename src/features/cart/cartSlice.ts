@@ -16,6 +16,16 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    updateQuantity(
+      state,
+      action: PayloadAction<{ id: number; quantity: number }>
+    ) {
+      const { id, quantity } = action.payload;
+      const item = state.items.find((item) => item.id === id);
+      if (item) {
+        item.quantity = quantity;
+      }
+    },
     addToCart(state, action: PayloadAction<Product>) {
       const { id, name, price } = action.payload;
       const existingItem = state.items.find((item) => item.id === id);
@@ -30,19 +40,19 @@ const cartSlice = createSlice({
         existingItem.quantity++;
       }
     },
-    removeFromCart(state,action: PayloadAction<number>){
-        const id = action.payload;
-        const item = state.items.find((item)=>item.id === id);
-        if(item){
-            item.quantity--;
-            if(item.quantity === 0){
-                state.items = state.items.filter((item)=>item.id !== id);
-            }
+    removeFromCart(state, action: PayloadAction<number>) {
+      const id = action.payload;
+      const item = state.items.find((item) => item.id === id);
+      if (item) {
+        item.quantity--;
+        if (item.quantity === 0) {
+          state.items = state.items.filter((item) => item.id !== id);
         }
-    }
+      }
+    },
   },
 });
-export const { addToCart,removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart,updateQuantity } = cartSlice.actions;
 export default cartSlice.reducer;
 export function getNumItems(state: RootState) {
   console.log("calledNum");
@@ -56,9 +66,11 @@ export const getMemoizedNumItems = createSelector(
   }
 );
 export const getTotalPrice = createSelector(
-    (state: RootState) => state.cart.items,
-    (items) => {
-      console.log("calledTotal");
-        return items.reduce((sum, item) => sum + item.quantity * item.price, 0).toFixed(2);
-    }
-)
+  (state: RootState) => state.cart.items,
+  (items) => {
+    console.log("calledTotal");
+    return items
+      .reduce((sum, item) => sum + item.quantity * item.price, 0)
+      .toFixed(2);
+  }
+);

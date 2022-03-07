@@ -1,14 +1,17 @@
 import React from "react";
-import { useAppSelector ,useAppDispatch} from "../../app/hooks";
-import { getTotalPrice, removeFromCart } from "./cartSlice";
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import { getTotalPrice, removeFromCart, updateQuantity } from "./cartSlice";
 import styles from "./Cart.module.css";
 
 export function Cart() {
-  const dispatch= useAppDispatch();
+  const dispatch = useAppDispatch();
   const products = useAppSelector(state => state.products.products);
   const items = useAppSelector(state => state.cart.items)
   const totalPrice = useAppSelector(getTotalPrice);
-
+  const onQuantityChanged = (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
+    const quantity = +e.target.value || 0;
+    dispatch(updateQuantity({ id, quantity }));
+  }
   return (
     <main className="page">
       <h1>Shopping Cart</h1>
@@ -26,9 +29,10 @@ export function Cart() {
             <tr key={item.id}>
               <td>{item.name}</td>
               <td>
-                <input type="text" className={styles.input} value={item.quantity}  />
+                <input type="text" className={styles.input} value={item.quantity} onChange={(e) => onQuantityChanged(e, item.id)}
+                />
               </td>
-              <td>${item.price}</td>
+              <td>${(item.price * item.quantity).toFixed(2)}</td>
               <td>
                 <button aria-label={`Remove ${item.name} from Shopping Cart`} onClick={() => dispatch(removeFromCart(item.id))}>
                   X
