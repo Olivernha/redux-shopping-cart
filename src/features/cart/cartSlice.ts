@@ -30,9 +30,19 @@ const cartSlice = createSlice({
         existingItem.quantity++;
       }
     },
+    removeFromCart(state,action: PayloadAction<number>){
+        const id = action.payload;
+        const item = state.items.find((item)=>item.id === id);
+        if(item){
+            item.quantity--;
+            if(item.quantity === 0){
+                state.items = state.items.filter((item)=>item.id !== id);
+            }
+        }
+    }
   },
 });
-export const { addToCart } = cartSlice.actions;
+export const { addToCart,removeFromCart } = cartSlice.actions;
 export default cartSlice.reducer;
 export function getNumItems(state: RootState) {
   console.log("calledNum");

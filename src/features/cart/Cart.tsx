@@ -1,12 +1,13 @@
 import React from "react";
-import { useAppSelector } from "../../app/hooks";
-import { getTotalPrice } from "./cartSlice";
+import { useAppSelector ,useAppDispatch} from "../../app/hooks";
+import { getTotalPrice, removeFromCart } from "./cartSlice";
 import styles from "./Cart.module.css";
 
 export function Cart() {
+  const dispatch= useAppDispatch();
   const products = useAppSelector(state => state.products.products);
   const items = useAppSelector(state => state.cart.items)
- const totalPrice = useAppSelector(getTotalPrice);
+  const totalPrice = useAppSelector(getTotalPrice);
 
   return (
     <main className="page">
@@ -25,11 +26,11 @@ export function Cart() {
             <tr key={item.id}>
               <td>{item.name}</td>
               <td>
-                <input type="text" className={styles.input} defaultValue={item.quantity} />
+                <input type="text" className={styles.input} value={item.quantity}  />
               </td>
               <td>${item.price}</td>
               <td>
-                <button aria-label={`Remove ${item.name} from Shopping Cart`}>
+                <button aria-label={`Remove ${item.name} from Shopping Cart`} onClick={() => dispatch(removeFromCart(item.id))}>
                   X
                 </button>
               </td>
