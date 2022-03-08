@@ -29,9 +29,10 @@ export async function checkout(items: CartItems): Promise<CheckoutResponse> {
   await sleep(500);
   const response = await fetch(url, {
     method: "POST",
-    body: JSON.stringify(items),
+    body: JSON.stringify({data:1}),
   });
   const data = await response.json();
+  
   if (!data.success) {
     throw new Error(data.error);
   }
