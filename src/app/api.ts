@@ -29,7 +29,7 @@ export async function checkout(items: CartItems): Promise<CheckoutResponse> {
   await sleep(500);
   const response = await fetch(url, {
     method: "POST",
-    body: JSON.stringify({data:1}),
+    body: JSON.stringify(items),
   });
   const data = await response.json();
   

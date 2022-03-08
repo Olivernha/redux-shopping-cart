@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk,createSelector } from "@reduxjs/toolkit";
-import { AppDispatch, RootState } from "../../app/store";
-import { Product ,CartItems,checkout} from "../../app/api";
+import { RootState } from "../../app/store";
+import { Product ,checkout} from "../../app/api";
 
 type CheckoutState = "LOADING" | "READY" | "ERROR";
 export interface CartState {
@@ -19,10 +19,12 @@ const initialState: CartState = {
   errorMessage:""
 };
 
-export const checkoutCart = createAsyncThunk("cart/checkout",async(items:CartItems)=>{
+export const checkoutCart = createAsyncThunk("cart/checkout", async (_, thunkAPI) => {
+  const state = thunkAPI.getState() as RootState;
+  const items = state.cart.items;
   const response = await checkout(items);
   return response;
-})
+});
 
 const cartSlice = createSlice({
   name: "cart",

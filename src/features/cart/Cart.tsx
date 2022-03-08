@@ -17,7 +17,7 @@ export function Cart() {
   }
   const onCheckout = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(checkoutCart(items));
+    dispatch(checkoutCart());
 
   }
   const tableClasses = classNames({
