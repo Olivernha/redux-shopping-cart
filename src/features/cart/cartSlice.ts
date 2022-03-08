@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import type { Product } from "../../app/api";
+
+type CheckoutState = "LOADING" | "READY" | "ERROR";
 export interface CartState {
   items: {
     id: number;
@@ -8,9 +10,11 @@ export interface CartState {
     quantity: number;
     price: number;
   }[];
+  checkoutState: CheckoutState;
 }
 const initialState: CartState = {
   items: [],
+  checkoutState: "READY",
 };
 const cartSlice = createSlice({
   name: "cart",
@@ -52,7 +56,7 @@ const cartSlice = createSlice({
     },
   },
 });
-export const { addToCart, removeFromCart,updateQuantity } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateQuantity } = cartSlice.actions;
 export default cartSlice.reducer;
 export function getNumItems(state: RootState) {
   console.log("calledNum");
