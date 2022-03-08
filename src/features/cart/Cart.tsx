@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from 'classnames'
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
-import { checkout, getTotalPrice, removeFromCart, updateQuantity } from "./cartSlice";
+import { checkoutCart, getTotalPrice, removeFromCart, updateQuantity } from "./cartSlice";
 import styles from "./Cart.module.css";
 
 export function Cart() {
@@ -16,7 +16,7 @@ export function Cart() {
   }
   const onCheckout = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(checkout());
+    dispatch(checkoutCart(items));
 
   }
   const tableClasses = classNames({

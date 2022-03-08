@@ -12,11 +12,19 @@ export async function getProducts(): Promise<Product[]> {
   const products = results.json();
   return products;
 }
-export type CartItems = { [productID: string]: number };
+
+export type CartItems = {
+  id: number;
+  name: string;
+  quantity: number;
+  price: number;
+}[];
 export type CheckoutResponse = { success: boolean; error?: string };
 
 export async function checkout(items: CartItems): Promise<CheckoutResponse> {
-  const modifier = Object.keys(items).length > 0 ? "success" : "error";
+  console.log(items.length);
+  
+  const modifier = items.length > 0 ? "success" : "error";
   const url = `/checkout-${modifier}.json`;
   await sleep(500);
   const response = await fetch(url, {
