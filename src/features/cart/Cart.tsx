@@ -14,9 +14,14 @@ export function Cart() {
     const quantity = +e.target.value || 0;
     dispatch(updateQuantity({ id, quantity }));
   }
+  const onCheckout = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch({ type: "cart/checkout/pending" });
+
+  }
   const tableClasses = classNames({
-    [styles.table]:true,
-    [styles.checkoutError]:checkoutState === "ERROR",
+    [styles.table]: true,
+    [styles.checkoutError]: checkoutState === "ERROR",
     [styles.checkoutLoading]: checkoutState === "LOADING"
   })
   return (
@@ -57,7 +62,7 @@ export function Cart() {
           </tr>
         </tfoot>
       </table>
-      <form>
+      <form onSubmit={onCheckout}>
         <button className={styles.button} type="submit">
           Checkout
         </button>

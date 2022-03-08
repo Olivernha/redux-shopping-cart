@@ -55,6 +55,14 @@ const cartSlice = createSlice({
       }
     },
   },
+  extraReducers:function(builder){
+    builder.addCase("cart/checkout/pending",(state,action)=>{
+      state.checkoutState = "LOADING"
+    })
+    builder.addCase("cart/checkout/pending",(state,action)=>{
+      state.checkoutState = "LOADING"
+    })
+  }
 });
 export const { addToCart, removeFromCart, updateQuantity } = cartSlice.actions;
 export default cartSlice.reducer;
