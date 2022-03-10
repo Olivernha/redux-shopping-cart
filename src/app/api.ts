@@ -24,8 +24,8 @@ export type CheckoutResponse = { success: boolean; error?: string };
 
 export async function checkout(items: CartItems): Promise<CheckoutResponse> {
  
-  const modifier = items.length > 0 ? "Success" : "Error";
-  const url = `/checkout${modifier}.json`;
+  const modifier = items.length > 0 ? "success" : "error";
+  const url = `/checkout-${modifier}.json`;
   await sleep(500);
   const response = await fetch(url, {
     method: "POST",
