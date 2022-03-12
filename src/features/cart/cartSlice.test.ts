@@ -4,9 +4,10 @@ import cartReducer, {
   getNumItems,
   removeFromCart,
   updateQuantity,
+  getMemoizedNumItems,
 } from "./cartSlice";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
-import {RootState} from "../../app/store";
+import { RootState } from "../../app/store";
 
 describe("cart reducer", function () {
   test("an empty action", function () {
@@ -120,9 +121,9 @@ describe("selectors", function () {
         checkoutState: "READY",
         errorMessage: "",
       };
-      expect(getNumItems({cart} as RootState)).toBe(0);
+      expect(getNumItems({ cart } as RootState)).toBe(0);
     });
-    test('should add up the total',() =>{
+    test("should add up the total", () => {
       const cart: CartState = {
         items: [
           {
@@ -135,7 +136,90 @@ describe("selectors", function () {
         checkoutState: "READY",
         errorMessage: "",
       };
-      expect(getNumItems({cart} as RootState)).toBe(3);
+      expect(getNumItems({ cart } as RootState)).toBe(3);
     });
+  });
+  describe("getMemorizedNumItems", function () {
+    it("should return 0 if there are no items", () => {
+      const cart: CartState = {
+        items: [],
+        checkoutState: "READY",
+        errorMessage: "",
+      };
+      expect(getMemoizedNumItems({ cart } as RootState)).toBe(0);
+    });
+    test("should add up the total", () => {
+      const cart: CartState = {
+        items:[
+          {
+            id: 1,
+            name: "test",
+            price: 1,
+            quantity: 2,
+          },
+          {
+            id: 2,
+            name: "test",
+            price: 1,
+            quantity: 3,
+          },
+        ],
+        checkoutState: "READY",
+        errorMessage: "",
+      }
+      expect(getMemoizedNumItems({ cart } as RootState)).toBe(5);
+    });
+    test('should not compute again with same state',()=>{
+      const cart: CartState = {
+        items:[
+          {
+            id: 1,
+            name: "test",
+            price: 1,
+            quantity: 2,
+          },
+          {
+            id: 2,
+            name: "test",
+            price: 1,
+            quantity: 3,
+          },
+        ],
+        checkoutState: "READY",
+        errorMessage: "",
+      }
+      getMemoizedNumItems.resetRecomputations();
+      getMemoizedNumItems({ cart } as RootState);
+      expect(getMemoizedNumItems.recomputations()).toBe(1);
+      getMemoizedNumItems({ cart } as RootState);
+      expect(getMemoizedNumItems.recomputations()).toBe(1);
+    })
+    test('should recompute with new state',() =>{
+      const cart: CartState = {
+        items: [
+          {
+            id: 1,
+            name: "test",
+            price: 1,
+            quantity: 3,
+          },
+        ],
+        checkoutState: "READY",
+        errorMessage: "",
+      };
+      getMemoizedNumItems.resetRecomputations();
+      getMemoizedNumItems({ cart } as RootState);
+      expect(getMemoizedNumItems.recomputations()).toBe(1);
+      cart.items = [
+        {
+          id: 1,
+          name: "test",
+          price: 1,
+          quantity: 8,
+        },
+      ];
+      getMemoizedNumItems({ cart } as RootState);
+      expect(getMemoizedNumItems.recomputations()).toBe(2);
+    })
   });
 });
