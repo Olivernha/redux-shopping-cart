@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk,createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "../../app/store";
 import { checkout} from "../../app/api";
+import {log} from "util";
 
 type CheckoutState = "LOADING" | "READY" | "ERROR";
 export interface CartState {

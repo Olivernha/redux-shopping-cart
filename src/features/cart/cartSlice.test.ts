@@ -5,6 +5,7 @@ import cartReducer, {
   removeFromCart,
   updateQuantity,
   getMemoizedNumItems,
+    getTotalPrice
 } from "./cartSlice";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
@@ -220,6 +221,102 @@ describe("selectors", function () {
       ];
       getMemoizedNumItems({ cart } as RootState);
       expect(getMemoizedNumItems.recomputations()).toBe(2);
+    })
+  });
+  describe('getTotalPrice', function () {
+    it('should return 0 if there are no items', () => {
+      const cart: CartState = {
+        items: [],
+        checkoutState: "READY",
+        errorMessage: "",
+      };
+      expect(getTotalPrice({ cart } as RootState)).toBe("0.00");
+    });
+    it('should add up the totals',()=>{
+      const state:CartState = {
+        items:[
+          {
+            id: 1,
+            name: "test",
+            price: 5,
+            quantity: 2,
+          },
+          {
+            id: 2,
+            name: "test",
+            price: 5,
+            quantity: 3,
+          },
+        ],
+        checkoutState: "READY",
+        errorMessage: "",
+      }
+      expect(getTotalPrice({ cart: state } as RootState)).toBe("25.00");
+    })
+    it('should not compute again with sam state',() =>{
+      const cart:CartState = {
+        items:[
+          {
+            id: 1,
+            name: "test",
+            price: 5,
+            quantity: 2,
+          },
+          {
+            id: 2,
+            name: "test",
+            price: 5,
+            quantity: 3,
+          },
+        ],
+        checkoutState: "READY",
+        errorMessage: "",
+      }
+      getTotalPrice.resetRecomputations();
+      getTotalPrice({ cart } as RootState);
+      expect(getTotalPrice.recomputations()).toBe(1);
+      getTotalPrice({ cart } as RootState);
+      expect(getTotalPrice.recomputations()).toBe(1);
+    })
+    it("should recompute with new products", () => {
+      const cart:CartState = {
+        items:[
+          {
+            id: 1,
+            name: "test",
+            price: 5,
+            quantity: 2,
+          },
+          {
+            id: 2,
+            name: "test",
+            price: 5,
+            quantity: 3,
+          },
+        ],
+        checkoutState: "READY",
+        errorMessage: "",
+      }
+      getTotalPrice.resetRecomputations();
+      getTotalPrice({ cart } as RootState);
+      expect(getTotalPrice.recomputations()).toBe(1);
+      cart.items= [
+        {
+          id: 1,
+          name: "test",
+          price: 5,
+          quantity: 8,
+        },
+      ];
+      getTotalPrice({ cart } as RootState);
+      getTotalPrice({ cart } as RootState);
+      getTotalPrice({ cart } as RootState);
+      expect(getTotalPrice.recomputations()).toBe(2);
+
+      cart.items= [];
+      let result = getTotalPrice({ cart } as RootState);
+      expect(result).toBe("0.00");
+      expect(getTotalPrice.recomputations()).toBe(3);
     })
   });
 });
