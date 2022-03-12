@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk,createSelector } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
-import { Product ,checkout} from "../../app/api";
+import type { RootState } from "../../app/store";
+import { checkout} from "../../app/api";
 
 type CheckoutState = "LOADING" | "READY" | "ERROR";
 export interface CartState {
@@ -91,7 +91,7 @@ const cartSlice = createSlice({
 
 export const { addToCart, removeFromCart, updateQuantity } = cartSlice.actions;
 export default cartSlice.reducer;
-export function getNumItems(state: RootState) {
+export const getNumItems = (state: RootState) => {
   console.log("calledNum");
   return state.cart.items.reduce((sum, item) => sum + item.quantity, 0);
 }

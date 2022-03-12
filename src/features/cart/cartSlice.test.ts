@@ -1,10 +1,12 @@
 import cartReducer, {
   addToCart,
   CartState,
+  getNumItems,
   removeFromCart,
   updateQuantity,
 } from "./cartSlice";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
+import {RootState} from "../../app/store";
 
 describe("cart reducer", function () {
   test("an empty action", function () {
@@ -79,7 +81,7 @@ describe("cart reducer", function () {
       errorMessage: "",
     });
   });
-  test('updateQuantity',() =>{
+  test("updateQuantity", () => {
     const initialState: CartState = {
       items: [
         {
@@ -92,7 +94,10 @@ describe("cart reducer", function () {
       checkoutState: "READY",
       errorMessage: "",
     };
-    const state = cartReducer(initialState, updateQuantity({id: 1, quantity: 5}));
+    const state = cartReducer(
+      initialState,
+      updateQuantity({ id: 1, quantity: 5 })
+    );
     expect(state).toEqual({
       items: [
         {
@@ -105,5 +110,32 @@ describe("cart reducer", function () {
       checkoutState: "READY",
       errorMessage: "",
     });
-  })
+  });
+});
+describe("selectors", function () {
+  describe("getNumItem", () => {
+    test("should return 0 if there are no items", () => {
+      const cart: CartState = {
+        items: [],
+        checkoutState: "READY",
+        errorMessage: "",
+      };
+      expect(getNumItems({cart} as RootState)).toBe(0);
+    });
+    test('should add up the total',() =>{
+      const cart: CartState = {
+        items: [
+          {
+            id: 1,
+            name: "test",
+            price: 1,
+            quantity: 3,
+          },
+        ],
+        checkoutState: "READY",
+        errorMessage: "",
+      };
+      expect(getNumItems({cart} as RootState)).toBe(3);
+    });
+  });
 });
