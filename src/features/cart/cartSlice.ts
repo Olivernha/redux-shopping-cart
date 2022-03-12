@@ -23,6 +23,7 @@ export const checkoutCart = createAsyncThunk("cart/checkout", async (_, thunkAPI
   const state = thunkAPI.getState() as RootState;
   const items = state.cart.items;
   const response = await checkout(items);
+  console.log(response);
   return response;
 });
 
@@ -97,14 +98,12 @@ export function getNumItems(state: RootState) {
 export const getMemoizedNumItems = createSelector(
   (state: RootState) => state.cart.items,
   (items) => {
-    console.log("calledNum");
     return items.reduce((sum, item) => sum + item.quantity, 0);
   }
 );
 export const getTotalPrice = createSelector(
   (state: RootState) => state.cart.items,
   (items) => {
-    console.log("calledTotal");
     return items
       .reduce((sum, item) => sum + item.quantity * item.price, 0)
       .toFixed(2);
