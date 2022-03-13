@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk,createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "../../app/store";
 import { checkout} from "../../app/api";
-import {log} from "util";
+
 
 type CheckoutState = "LOADING" | "READY" | "ERROR";
 export interface CartState {
@@ -23,9 +23,12 @@ const initialState: CartState = {
 export const checkoutCart = createAsyncThunk("cart/checkout", async (_, thunkAPI) => {
   const state = thunkAPI.getState() as RootState;
   const items = state.cart.items;
-  const response = await checkout(items);
-  console.log(response);
-  return response;
+   if(items.length===0){
+     return Promise.reject(new Error('Must include cart items'))
+   }
+   const response = await checkout(items);
+   return response;
+
 });
 
 const cartSlice = createSlice({
@@ -93,7 +96,6 @@ const cartSlice = createSlice({
 export const { addToCart, removeFromCart, updateQuantity } = cartSlice.actions;
 export default cartSlice.reducer;
 export const getNumItems = (state: RootState) => {
-  console.log("calledNum");
   return state.cart.items.reduce((sum, item) => sum + item.quantity, 0);
 }
 export const getMemoizedNumItems = createSelector(
