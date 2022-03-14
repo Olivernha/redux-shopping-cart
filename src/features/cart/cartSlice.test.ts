@@ -11,7 +11,7 @@ import cartReducer, {
   checkoutCart,
 } from "./cartSlice";
 import { ActionCreatorWithoutPayload } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
+import { RootState, getStoreWithState } from "../../app/store";
 import * as api from "../../app/api";
 const mockStore = configureStore([thunk]);
 jest.mock("../../app/api", () => {
@@ -393,7 +393,9 @@ describe("thunks", function () {
   });
   describe("chekoutCart w/mock redux store", function () {
     it("should checkout", async () => {
-      const store = mockStore({ cart: { items: [
+      const store = mockStore({
+        cart: {
+          items: [
             {
               id: 1,
               name: "test",
@@ -406,7 +408,9 @@ describe("thunks", function () {
               price: 5,
               quantity: 3,
             },
-          ], } });
+          ],
+        },
+      });
       await store.dispatch(checkoutCart() as any);
       const actions = store.getActions();
       expect(actions).toHaveLength(2);
@@ -425,4 +429,40 @@ describe("thunks", function () {
       expect(actions[1].error.message).toEqual("Must include cart items");
     });
   });
+  describe("checkoutCart w/full redux store", function () {
+    it("should checkout with items", async () => {
+      const state = getStateWithItems([
+        { id: 1, name: "test", price: 1, quantity: 2 },
+      ]);
+      const store = getStoreWithState(state);
+      await store.dispatch(checkoutCart());
+      expect(store.getState().cart).toEqual({
+        items: [],
+        checkoutState: "READY",
+        errorMessage: "",
+      });
+    });
+    it("should fail with no items", async () => {
+      const state = getStateWithItems([]);
+      const store = getStoreWithState(state);
+      await store.dispatch(checkoutCart());
+      expect(store.getState().cart).toEqual({
+        items: [],
+        checkoutState: "ERROR",
+        errorMessage: "Must include cart items",
+      });
+    });
+  });
 });
+function getStateWithItems(
+  items: { id: number; name: string; quantity: number; price: number }[]
+): RootState {
+  return {
+    products: { products: {} },
+    cart: {
+      items,
+      checkoutState: "READY",
+      errorMessage: "",
+    },
+  };
+}
